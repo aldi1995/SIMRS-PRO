@@ -1,61 +1,147 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SIMRS PRO  
+**Hospital Information System — Enterprise Edition**
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+SIMRS PRO adalah sistem informasi manajemen rumah sakit (SIMRS) modern yang dirancang untuk mendukung operasional klinis, administratif, dan manajerial secara terintegrasi, aman, dan scalable.
 
-## About Laravel
+> ⚠️ **This project is PRIVATE and NOT OPEN SOURCE.**  
+> Unauthorized use, distribution, or modification is strictly prohibited.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📌 Product Overview
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+SIMRS PRO mencakup modul lengkap untuk kebutuhan rumah sakit, mulai dari pelayanan medis, penunjang klinis, keuangan, manajemen, hingga administrasi sistem.
 
-## Learning Laravel
+Fokus utama:
+- Efisiensi operasional rumah sakit
+- Keamanan data medis (healthcare-grade)
+- Modular & scalable architecture
+- Enterprise-ready UI & workflow
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🏥 Core Modules
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🩺 Medical Services
+- Patient Master Data
+- Registration & Visits
+- Electronic Medical Records (SOAP)
+- Emergency (IGD)
+- Inpatient & Outpatient Services
+- Medical Procedures
 
-## Laravel Sponsors
+### 🔬 Supporting Units
+- Laboratory
+- Radiology
+- Pharmacy
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 💰 Finance
+- Billing & Invoice
+- Cashier & Payments
+- BPJS Claims (INA-CBG Ready)
 
-### Premium Partners
+### 📊 Management & Reports
+- Executive Dashboard
+- Hospital KPI Monitoring
+- Reports & Statistics
+- Operational Performance
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### ⚙️ System & Administration
+- User Management
+- Roles & Permissions (RBAC)
+- Audit Log & Activity Tracking
+- Master Data Configuration
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🧠 Key Features
 
-## Code of Conduct
+- Modern UI (Dark Mode, Glass UI, Enterprise Look)
+- Modular Architecture (Extendable Modules)
+- Secure Authentication & Authorization
+- Audit Trail & Activity Logging
+- Ready for API Integration
+- Designed for Large-Scale Hospitals
+- Built for Performance & Maintainability
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🛠 Tech Stack
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Backend
+- Laravel 12
+- REST API Ready
+- Role-Based Access Control (Planned)
 
-## License
+### Frontend
+- Vue 3
+- Inertia.js
+- Vuetify 3
+- Tailwind-ready UI Layer
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Database
+- MySQL / PostgreSQL (Planned)
+
+---
+
+## 🚀 Project Status
+
+| Component | Status |
+|---------|--------|
+UI v1 | ✅ Completed  
+Core Backend | ⏳ In Progress  
+RBAC Security | ⏳ Planned  
+Realtime Engine | ⏳ Planned  
+Production Deployment | ⏳ Planned  
+
+---
+
+## 🔐 License & Usage
+
+This software is **PROPRIETARY**.
+
+**You are NOT allowed to:**
+- Copy or redistribute this software
+- Publish source code publicly
+- Use commercially without written authorization
+- Reverse engineer any part of the system
+
+All rights reserved © 2026 — SIMRS PRO.
+
+---
+
+## 🧑‍💻 Maintainer
+
+**Renaldi (Aldi)**  
+Tech Lead — SIMRS PRO  
+Indonesia
+
+For enterprise inquiries, partnerships, or licensing:
+📩 Contact repository owner
+
+---
+
+## 🧭 Roadmap (Next Phase)
+
+- Full Database Integration (CRUD Real)
+- Doctor Mode (SOAP, Prescriptions, Orders)
+- Realtime Queue System
+- BPJS Web Service Integration
+- Mobile Companion App
+- Production Deployment Pipeline
+- Commercial Release v1.0
+
+---
+
+## ⚠️ Security Notice
+
+This repository may contain:
+- Sensitive business logic  
+- Healthcare workflows  
+- Confidential system design  
+
+**Do not share access without authorization.**
+
+---
+
+> **SIMRS PRO — Enterprise Hospital System**
