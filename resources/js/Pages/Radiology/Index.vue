@@ -1,39 +1,40 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
-import { Head } from '@inertiajs/vue3'
-import { ref } from 'vue'
-import { VCard, VDataTable, VChip } from 'vuetify/components'
+import { Head, Link } from '@inertiajs/vue3'
 
-const headers = [
-  { title: 'No Order', key: 'order' },
-  { title: 'Pasien', key: 'patient' },
-  { title: 'Pemeriksaan', key: 'exam' },
-  { title: 'Dokter', key: 'doctor' },
-  { title: 'Status', key: 'status' }
+const rows = [
+  { id: 1, patient: 'Budi Santoso', exam: 'Rontgen Dada', status: 'Selesai' },
+  { id: 2, patient: 'Dewi Kartika', exam: 'MRI Kepala', status: 'Proses' }
 ]
-
-const orders = ref([
-  { order: 'RAD-001', patient: 'Ahmad Fauzi', exam: 'Rontgen Thorax', doctor: 'dr. Andi', status: 'Proses' },
-  { order: 'RAD-002', patient: 'Siti Rahma', exam: 'USG Abdomen', doctor: 'dr. Rina', status: 'Selesai' }
-])
 </script>
 
 <template>
   <Head title="Radiologi" />
   <AppLayout>
 
-    <h2 class="text-h5 text-white font-weight-bold mb-4">
-      Radiologi
-    </h2>
+    <div class="page-header mb-5">
+      <h1 class="page-title">Radiologi</h1>
+      <Link href="/radiology/create">
+        <v-btn color="primary" prepend-icon="mdi-plus">Tambah</v-btn>
+      </Link>
+    </div>
 
-    <v-card class="glass-panel pa-2">
-      <v-data-table :headers="headers" :items="orders" class="dark-table">
-        <template #item.status="{ value }">
-          <v-chip size="small" :color="value === 'Selesai' ? 'green' : 'blue'">
-            {{ value }}
-          </v-chip>
-        </template>
-      </v-data-table>
+    <v-card class="glass-card pa-4">
+      <v-table>
+        <thead>
+          <tr>
+            <th>Pasien</th><th>Pemeriksaan</th><th>Status</th><th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="r in rows" :key="r.id">
+            <td>{{ r.patient }}</td>
+            <td>{{ r.exam }}</td>
+            <td><v-chip color="purple">{{ r.status }}</v-chip></td>
+            <td><v-btn icon="mdi-eye" size="small" variant="tonal"/></td>
+          </tr>
+        </tbody>
+      </v-table>
     </v-card>
 
   </AppLayout>

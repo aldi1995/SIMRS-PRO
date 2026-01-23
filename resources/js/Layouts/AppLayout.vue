@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { usePage, Link } from '@inertiajs/vue3'
+import { usePage, Link, router } from '@inertiajs/vue3'
 import {
   VApp,
   VNavigationDrawer,
@@ -14,12 +14,23 @@ import {
   VBtn,
   VAvatar,
   VDivider,
-  VListGroup
+  VListGroup,
+  VDialog,
+  VCard,
+  VCardTitle,
+  VCardText,
+  VCardActions
 } from 'vuetify/components'
 
 const drawer = ref(true)
+const confirmLogout = ref(false)
+
 const page = usePage()
 const user = page.props.auth?.user
+
+const logout = () => {
+  router.post(route('logout'))
+}
 
 const menu = [
   { title: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard' },
@@ -29,8 +40,8 @@ const menu = [
     icon: 'mdi-stethoscope',
     children: [
       { title: 'Pasien', route: '/patients' },
-      { title: 'Kunjungan', route: '/visits/create' },
-      { title: 'Rekam Medis', route: '/medical-records/soap' },
+      { title: 'Daftar Kunjungan', route: '/visits/' },
+      { title: 'Rekam Medis', route: '/medical-records/' },
       { title: 'IGD', route: '/igd' },
       { title: 'Rawat Jalan', route: '/outpatient' },
       { title: 'Rawat Inap', route: '/inpatient' },
@@ -44,7 +55,7 @@ const menu = [
     children: [
       { title: 'Laboratorium', route: '/laboratory' },
       { title: 'Radiologi', route: '/radiology' },
-      { title: 'Farmasi', route: '' }
+      { title: 'Farmasi', route: '/pharmacy' }
     ]
   },
 
@@ -53,32 +64,31 @@ const menu = [
     icon: 'mdi-cash-register',
     children: [
       { title: 'Billing', route: '/finance/billing' },
-    { title: 'Kasir', route: '/finance/cashier' },
-    { title: 'Klaim BPJS', route: '/finance/bpjs' }
+      { title: 'Kasir', route: '/finance/cashier' },
+      { title: 'Klaim BPJS', route: '/finance/bpjs' }
     ]
   },
 
   {
-  title: 'Manajemen',
-  icon: 'mdi-chart-line',
-  children: [
-    { title: 'Dashboard Manajemen', route: '/management/dashboard' },
-    { title: 'Laporan RS', route: '/management/reports' },
-    { title: 'Statistik RS', route: '/management/statistics' }
-  ]
-},
+    title: 'Manajemen',
+    icon: 'mdi-chart-line',
+    children: [
+      { title: 'Dashboard Manajemen', route: '/management/dashboard' },
+      { title: 'Laporan RS', route: '/management/reports' },
+      { title: 'Statistik RS', route: '/management/statistics' }
+    ]
+  },
 
-{
-  title: 'Sistem',
-  icon: 'mdi-cog',
-  children: [
-    { title: 'User Management', route: '/system/users' },
-    { title: 'Role & Permission', route: '/system/roles' },
-    { title: 'Audit Log', route: '/system/audit-log' },
-    { title: 'Master Data', route: '/system/master-data' }
-  ]
-},
-
+  {
+    title: 'Sistem',
+    icon: 'mdi-cog',
+    children: [
+      { title: 'User Management', route: '/system/users' },
+      { title: 'Role & Permission', route: '/system/roles' },
+      { title: 'Audit Log', route: '/system/audit-log' },
+      { title: 'Master Data', route: '/system/master-data' }
+    ]
+  }
 ]
 </script>
 
@@ -87,6 +97,8 @@ const menu = [
 
     <!-- SIDEBAR -->
     <v-navigation-drawer v-model="drawer" width="290" class="sidebar-glass">
+
+      <!-- BRAND -->
       <div class="brand px-5 py-4">
         <strong class="text-h6">
           SIMRS<span class="text-primary">-PRO</span>
@@ -96,6 +108,7 @@ const menu = [
 
       <v-divider class="mb-2" />
 
+      <!-- MENU -->
       <v-list nav density="comfortable">
 
         <template v-for="item in menu" :key="item.title">
@@ -139,6 +152,7 @@ const menu = [
 
     <!-- TOP BAR -->
     <v-app-bar flat height="72" class="topbar-glass">
+
       <v-btn icon @click="drawer = !drawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
@@ -147,19 +161,16 @@ const menu = [
 
       <div class="d-flex align-center gap-2">
         <span class="user-name">{{ user?.name }}</span>
+
         <v-avatar size="36" color="primary">
           {{ user?.name?.charAt(0) }}
         </v-avatar>
 
-        <v-btn
-          icon
-          variant="text"
-          :href="route('logout')"
-          method="post"
-        >
+        <v-btn icon variant="text" @click="confirmLogout = true">
           <v-icon>mdi-logout</v-icon>
         </v-btn>
       </div>
+
     </v-app-bar>
 
     <!-- MAIN -->
@@ -169,10 +180,34 @@ const menu = [
       </v-container>
     </v-main>
 
+    <!-- LOGOUT CONFIRM MODAL -->
+    <v-dialog v-model="confirmLogout" max-width="420">
+      <v-card class="glass-card">
+        <v-card-title class="text-h6">
+          Konfirmasi Logout
+        </v-card-title>
+
+        <v-card-text class="text-muted">
+          Apakah Anda yakin ingin keluar dari SIMRS PRO?
+        </v-card-text>
+
+        <v-card-actions class="justify-end">
+          <v-btn variant="text" @click="confirmLogout = false">
+            Batal
+          </v-btn>
+
+          <v-btn color="red" @click="logout">
+            Logout
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-app>
 </template>
 
 <style scoped>
+/* Sidebar */
 .sidebar-glass {
   background: rgba(15, 23, 42, 0.92);
   backdrop-filter: blur(12px);
@@ -185,6 +220,7 @@ const menu = [
   color: #94a3b8;
 }
 
+/* Topbar */
 .topbar-glass {
   background: rgba(15, 23, 42, 0.85);
   backdrop-filter: blur(12px);
@@ -197,12 +233,14 @@ const menu = [
   color: #cbd5f5;
 }
 
+/* Main */
 .main-bg {
   background: linear-gradient(135deg, #020617, #0f172a);
   min-height: 100vh;
   color: white;
 }
 
+/* Sidebar Link */
 .sidebar-link {
   width: 100%;
   display: flex;
@@ -210,9 +248,43 @@ const menu = [
   gap: 10px;
   text-decoration: none;
   color: inherit;
+  font-weight: 500;
 }
 
 .sidebar-link:hover {
   color: #60a5fa;
 }
+
+/* Modal Glass */
+.glass-card {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  color: white;
+}
+
+.text-muted {
+  color: #94a3b8;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-header h1 {
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.glass-card {
+  background: rgba(255,255,255,0.06);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.text-muted {
+  color: #94a3b8;
+}
+
 </style>

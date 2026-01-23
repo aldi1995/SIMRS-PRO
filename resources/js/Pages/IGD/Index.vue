@@ -1,35 +1,50 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
-import { Head } from '@inertiajs/vue3'
-import { VCard, VChip } from 'vuetify/components'
+import { Head, Link } from '@inertiajs/vue3'
 
-const triage = [
-  { name: 'Ahmad Fauzi', level: 'Merah', note: 'Gawat' },
-  { name: 'Siti Rahma', level: 'Kuning', note: 'Urgent' }
+const igd = [
+  { id: 1, patient: 'Budi Santoso', triage: 'Merah', doctor: 'dr. Arif', status: 'Kritis' },
+  { id: 2, patient: 'Ani Lestari', triage: 'Hijau', doctor: 'dr. Rina', status: 'Stabil' }
 ]
 </script>
 
 <template>
-  <Head title="IGD Triage" />
+  <Head title="IGD" />
+
   <AppLayout>
+    <div class="page-header mb-5">
+      <h1 class="page-title">Pasien IGD</h1>
 
-    <h2 class="text-h5 text-white font-weight-bold mb-4">IGD / Triage</h2>
+      <Link href="/igd/create">
+        <v-btn color="primary" prepend-icon="mdi-plus">Registrasi IGD</v-btn>
+      </Link>
+    </div>
 
-    <v-card class="glass-panel pa-4">
-      <div v-for="t in triage" :key="t.name" class="triage-row">
-        <span>{{ t.name }}</span>
-        <v-chip :color="t.level === 'Merah' ? 'red' : 'orange'">{{ t.level }}</v-chip>
-      </div>
+    <v-card class="glass-card pa-4">
+      <v-table>
+        <thead>
+          <tr>
+            <th>Pasien</th>
+            <th>Triage</th>
+            <th>Dokter</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="i in igd" :key="i.id">
+            <td>{{ i.patient }}</td>
+            <td><v-chip color="red">{{ i.triage }}</v-chip></td>
+            <td>{{ i.doctor }}</td>
+            <td>{{ i.status }}</td>
+            <td class="d-flex gap-2">
+              <v-btn icon="mdi-eye" size="small" variant="tonal" />
+              <v-btn icon="mdi-pencil" size="small" variant="tonal" />
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
     </v-card>
-
   </AppLayout>
 </template>
-
-<style scoped>
-.triage-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  color: white;
-}
-</style>
