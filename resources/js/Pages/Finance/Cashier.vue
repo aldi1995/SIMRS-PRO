@@ -1,56 +1,51 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
-import { Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { VCard, VTextField, VBtn, VDivider } from 'vuetify/components'
 
-const invoice = ref('INV-001')
-const patient = ref('Ahmad Fauzi')
-const total = ref(350000)
-const paid = ref(0)
-
-const change = () => paid.value - total.value
-
-const formatCurrency = (value) =>
-  new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value)
+const payments = ref([
+  { invoice: 'INV-20260125-001', patient: 'Ahmad Fauzi', amount: 1250000, method: 'QRIS', status: 'Lunas' },
+  { invoice: 'INV-20260125-002', patient: 'Siti Rahma', amount: 420000, method: 'Tunai', status: 'Pending' }
+])
 </script>
 
 <template>
-  <Head title="Kasir" />
-  <AppLayout>
+<AppLayout>
+<v-card class="glass-card pa-6">
+<h2 class="text-h6 font-weight-bold mb-1">Kasir & Pembayaran</h2>
+<p class="text-muted mb-4">Riwayat transaksi pembayaran pasien</p>
 
-    <h2 class="text-h5 font-weight-bold text-white mb-4">
-      Kasir Pembayaran
-    </h2>
+<v-data-table :items="payments" class="glass-table">
+<template #headers>
+<tr>
+<th>Invoice</th>
+<th>Pasien</th>
+<th>Total</th>
+<th>Metode</th>
+<th>Status</th>
+<th class="text-right">Aksi</th>
+</tr>
+</template>
 
-    <v-card class="glass-panel pa-5">
+<template #item="{ item }">
+<tr>
+<td>{{ item.invoice }}</td>
+<td>{{ item.patient }}</td>
+<td>Rp {{ item.amount.toLocaleString() }}</td>
+<td>{{ item.method }}</td>
 
-      <v-text-field label="Nomor Invoice" v-model="invoice" disabled />
-      <v-text-field label="Nama Pasien" v-model="patient" disabled />
+<td>
+<v-chip :color="item.status === 'Lunas' ? 'green' : 'orange'" size="small">
+{{ item.status }}
+</v-chip>
+</td>
 
-      <v-divider class="my-3" />
+<td class="text-right">
+<v-btn icon><v-icon>mdi-receipt</v-icon></v-btn>
+</td>
+</tr>
+</template>
+</v-data-table>
 
-      <div class="d-flex justify-space-between mb-2">
-        <span>Total Tagihan</span>
-        <strong>{{ formatCurrency(total) }}</strong>
-      </div>
-
-      <v-text-field
-        label="Jumlah Dibayar"
-        type="number"
-        v-model="paid"
-      />
-
-      <div class="d-flex justify-space-between mt-2">
-        <span>Kembalian</span>
-        <strong class="text-success">{{ formatCurrency(change()) }}</strong>
-      </div>
-
-      <v-btn block color="primary" class="mt-4">
-        Proses Pembayaran
-      </v-btn>
-
-    </v-card>
-
-  </AppLayout>
+</v-card>
+</AppLayout>
 </template>

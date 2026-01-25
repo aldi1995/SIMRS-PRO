@@ -1,42 +1,30 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
-import { Head } from '@inertiajs/vue3'
+import { ref } from 'vue'
 
-const stats = [
-  { label: 'Rawat Jalan', value: 320 },
-  { label: 'Rawat Inap', value: 110 },
-  { label: 'IGD', value: 78 },
-  { label: 'Rujukan', value: 42 }
-]
+const stats = ref([
+  { label: 'Pasien Rawat Jalan', value: 320 },
+  { label: 'Pasien Rawat Inap', value: 124 },
+  { label: 'Pasien IGD', value: 98 }
+])
 </script>
 
 <template>
-  <Head title="Statistik RS" />
-  <AppLayout>
+<AppLayout>
+<v-card class="glass-card pa-6">
 
-    <h2 class="text-h5 font-weight-bold text-white mb-4">
-      Statistik Rumah Sakit
-    </h2>
+<h2 class="text-h6 font-weight-bold mb-2">Statistik Rumah Sakit</h2>
+<p class="text-muted mb-4">Ringkasan data operasional</p>
 
-    <v-card class="glass-panel pa-4">
-      <table class="stats-table">
-        <tr v-for="s in stats" :key="s.label">
-          <td>{{ s.label }}</td>
-          <td class="text-right font-weight-bold">{{ s.value }}</td>
-        </tr>
-      </table>
-    </v-card>
+<v-row dense>
+<v-col v-for="s in stats" :key="s.label" cols="12" md="4">
+<v-card class="glass-card pa-4">
+<h3 class="text-muted">{{ s.label }}</h3>
+<h1 class="text-primary font-weight-bold">{{ s.value }}</h1>
+</v-card>
+</v-col>
+</v-row>
 
-  </AppLayout>
+</v-card>
+</AppLayout>
 </template>
-
-<style scoped>
-.stats-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.stats-table td {
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-</style>

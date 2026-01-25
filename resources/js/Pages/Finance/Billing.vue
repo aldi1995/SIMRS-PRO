@@ -1,39 +1,91 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
-import { Head } from '@inertiajs/vue3'
+import { ref } from 'vue'
 
-const rows = [
-  { id: 1, patient: 'Ahmad Fauzi', total: 1250000, status: 'Belum Lunas' },
-  { id: 2, patient: 'Siti Rahma', total: 750000, status: 'Lunas' }
-]
+const search = ref('')
+const rows = ref([
+  {
+    invoice: 'INV-20260125-001',
+    patient: 'Ahmad Fauzi',
+    service: 'Rawat Inap',
+    total: 1250000,
+    status: 'Belum Lunas'
+  },
+  {
+    invoice: 'INV-20260125-002',
+    patient: 'Siti Rahma',
+    service: 'Rawat Jalan',
+    total: 420000,
+    status: 'Lunas'
+  }
+])
 </script>
 
 <template>
-  <Head title="Billing" />
   <AppLayout>
+    <v-card class="glass-card pa-6">
 
-    <h1 class="page-title mb-5">Billing Pasien</h1>
+      <div class="d-flex justify-space-between mb-4">
+        <div>
+          <h2 class="text-h6 font-weight-bold">Billing Pasien</h2>
+          <p class="text-muted">Tagihan pasien aktif</p>
+        </div>
 
-    <v-card class="glass-card pa-4">
-      <v-table>
-        <thead>
+        <v-btn color="primary">
+          <v-icon left>mdi-plus</v-icon>
+          Tambah Invoice
+        </v-btn>
+      </div>
+
+      <v-text-field
+        v-model="search"
+        label="Cari pasien / invoice"
+        prepend-inner-icon="mdi-magnify"
+        density="compact"
+        class="mb-4"
+      />
+
+      <v-data-table
+        :items="rows"
+        :search="search"
+        class="glass-table"
+      >
+        <template #headers>
           <tr>
-            <th>Pasien</th><th>Total</th><th>Status</th>
+            <th>Invoice</th>
+            <th>Pasien</th>
+            <th>Layanan</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th class="text-right">Aksi</th>
           </tr>
-        </thead>
-        <tbody>
-          <tr v-for="r in rows" :key="r.id">
-            <td>{{ r.patient }}</td>
-            <td>Rp {{ r.total.toLocaleString() }}</td>
+        </template>
+
+        <template #item="{ item }">
+          <tr>
+            <td>{{ item.invoice }}</td>
+            <td>{{ item.patient }}</td>
+            <td>{{ item.service }}</td>
+            <td>Rp {{ item.total.toLocaleString() }}</td>
+
             <td>
-              <v-chip :color="r.status === 'Lunas' ? 'green' : 'red'">
-                {{ r.status }}
+              <v-chip
+                :color="item.status === 'Lunas' ? 'green' : 'orange'"
+                size="small"
+              >
+                {{ item.status }}
               </v-chip>
             </td>
-          </tr>
-        </tbody>
-      </v-table>
-    </v-card>
 
+            <td class="text-right">
+              <v-btn icon size="small"><v-icon>mdi-eye</v-icon></v-btn>
+              <v-btn icon size="small"><v-icon>mdi-pencil</v-icon></v-btn>
+              <v-btn icon size="small" color="red"><v-icon>mdi-delete</v-icon></v-btn>
+            </td>
+          </tr>
+        </template>
+
+      </v-data-table>
+    </v-card>
   </AppLayout>
 </template>

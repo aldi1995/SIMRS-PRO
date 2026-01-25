@@ -1,47 +1,43 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
-import { Head } from '@inertiajs/vue3'
+import { ref } from 'vue'
 
-const reports = [
-  { title: 'Laporan Kunjungan Pasien', type: 'Harian' },
-  { title: 'Laporan Pendapatan RS', type: 'Bulanan' },
-  { title: 'Laporan BOR & LOS', type: 'Bulanan' },
-  { title: 'Laporan Farmasi', type: 'Mingguan' }
-]
+const reports = ref([
+  { title: 'Laporan Keuangan Bulanan', category: 'Finance', date: '2026-01-25' },
+  { title: 'Laporan BOR Rawat Inap', category: 'Operasional', date: '2026-01-25' }
+])
 </script>
 
 <template>
-  <Head title="Laporan RS" />
-  <AppLayout>
+<AppLayout>
+<v-card class="glass-card pa-6">
 
-    <h2 class="text-h5 font-weight-bold text-white mb-4">
-      Laporan Rumah Sakit
-    </h2>
+<h2 class="text-h6 font-weight-bold mb-2">Laporan Rumah Sakit</h2>
+<p class="text-muted mb-4">Dokumen laporan strategis RS</p>
 
-    <div class="grid-2">
-      <v-card
-        v-for="report in reports"
-        :key="report.title"
-        class="glass-panel pa-4 d-flex justify-space-between align-center"
-      >
-        <div>
-          <h3 class="font-weight-bold">{{ report.title }}</h3>
-          <p class="muted-text text-caption">{{ report.type }}</p>
-        </div>
-
-        <v-btn color="primary" variant="tonal">
-          Download
-        </v-btn>
-      </v-card>
-    </div>
-
-  </AppLayout>
+<v-data-table :items="reports" class="glass-table">
+<template #headers>
+<tr>
+<th>Nama Laporan</th>
+<th>Kategori</th>
+<th>Tanggal</th>
+<th class="text-right">Aksi</th>
+</tr>
 </template>
 
-<style scoped>
-.grid-2 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 16px;
-}
-</style>
+<template #item="{ item }">
+<tr>
+<td>{{ item.title }}</td>
+<td>{{ item.category }}</td>
+<td>{{ item.date }}</td>
+
+<td class="text-right">
+<v-btn icon><v-icon>mdi-download</v-icon></v-btn>
+</td>
+</tr>
+</template>
+</v-data-table>
+
+</v-card>
+</AppLayout>
+</template>
