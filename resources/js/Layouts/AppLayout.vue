@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { usePage, Link, router } from '@inertiajs/vue3'
 import {
   VApp,
@@ -28,25 +28,33 @@ const confirmLogout = ref(false)
 
 const page = usePage()
 const user = page.props.auth?.user
+const roles = page.props.auth?.roles || []
+const permissions = page.props.auth?.permissions || []
 
 const logout = () => {
   router.post(route('logout'))
 }
 
+/* Permission Checker */
+const can = (permission) => {
+  return roles.includes('Super Admin') || permissions.includes(permission)
+}
+
 const menu = [
-  { title: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard' },
+
+  { title: 'Dashboard', icon: 'mdi-view-dashboard', route: '/dashboard', permission: 'view dashboard' },
 
   {
     title: 'Pelayanan Medis',
     icon: 'mdi-stethoscope',
     children: [
-      { title: 'Pasien', route: '/patients' },
-      { title: 'Kunjungan', route: '/visits' },
-      { title: 'Rekam Medis', route: '/medical-records/index' },
-      { title: 'IGD', route: '/igd' },
-      { title: 'Rawat Jalan', route: '/outpatient' },
-      { title: 'Rawat Inap', route: '/inpatient' },
-      { title: 'Tindakan Medis', route: '/procedures' }
+      { title: 'Pasien', route: '/patients', permission: 'manage patients' },
+      { title: 'Kunjungan', route: '/visits', permission: 'manage visits' },
+      { title: 'Rekam Medis', route: '/medical-records/index', permission: 'manage medical records' },
+      { title: 'IGD', route: '/igd', permission: 'manage visits' },
+      { title: 'Rawat Jalan', route: '/outpatient', permission: 'manage visits' },
+      { title: 'Rawat Inap', route: '/inpatient', permission: 'manage visits' },
+      { title: 'Tindakan Medis', route: '/procedures', permission: 'manage medical records' }
     ]
   },
 
@@ -54,9 +62,9 @@ const menu = [
     title: 'Penunjang',
     icon: 'mdi-flask',
     children: [
-      { title: 'Laboratorium', route: '/laboratory' },
-      { title: 'Radiologi', route: '/radiology' },
-      { title: 'Farmasi', route: '/pharmacy' }
+      { title: 'Laboratorium', route: '/laboratory', permission: 'manage medical records' },
+      { title: 'Radiologi', route: '/radiology', permission: 'manage medical records' },
+      { title: 'Farmasi', route: '/pharmacy', permission: 'manage pharmacy' }
     ]
   },
 
@@ -64,10 +72,10 @@ const menu = [
     title: 'Keuangan',
     icon: 'mdi-cash-register',
     children: [
-      { title: 'Billing', route: '/finance/billing' },
-      { title: 'Kasir', route: '/finance/cashier' },
-      { title: 'Klaim BPJS', route: '/finance/bpjs' },
-      { title: 'Akuntansi', route: '/finance/accounting' }
+      { title: 'Billing', route: '/finance/billing', permission: 'manage billing' },
+      { title: 'Kasir', route: '/finance/cashier', permission: 'manage cashier' },
+      { title: 'Klaim BPJS', route: '/finance/bpjs', permission: 'manage billing' },
+      { title: 'Akuntansi', route: '/finance/accounting', permission: 'manage billing' }
     ]
   },
 
@@ -75,9 +83,9 @@ const menu = [
     title: 'SDM / HRIS',
     icon: 'mdi-account-group',
     children: [
-      { title: 'Data Pegawai', route: '/hr/employees' },
-      { title: 'Shift & Jadwal', route: '/hr/schedules' },
-      { title: 'Payroll', route: '/hr/payroll' }
+      { title: 'Data Pegawai', route: '/hr/employees', permission: 'manage employees' },
+      { title: 'Shift & Jadwal', route: '/hr/schedules', permission: 'manage employees' },
+      { title: 'Payroll', route: '/hr/payroll', permission: 'manage payroll' }
     ]
   },
 
@@ -85,9 +93,9 @@ const menu = [
     title: 'Logistik & Inventory',
     icon: 'mdi-warehouse',
     children: [
-      { title: 'Stok Barang', route: '/inventory' },
-      { title: 'Aset Rumah Sakit', route: '/assets' },
-      { title: 'Supplier', route: '/suppliers' }
+      { title: 'Stok Barang', route: '/inventory', permission: 'manage inventory' },
+      { title: 'Aset Rumah Sakit', route: '/assets', permission: 'manage inventory' },
+      { title: 'Supplier', route: '/suppliers', permission: 'manage inventory' }
     ]
   },
 
@@ -95,9 +103,9 @@ const menu = [
     title: 'Manajemen',
     icon: 'mdi-chart-line',
     children: [
-      { title: 'Dashboard Eksekutif', route: '/management/dashboard' },
-      { title: 'Laporan Rumah Sakit', route: '/management/reports' },
-      { title: 'Statistik RS', route: '/management/statistics' }
+      { title: 'Dashboard Eksekutif', route: '/management/dashboard', permission: 'view executive dashboard' },
+      { title: 'Laporan Rumah Sakit', route: '/management/reports', permission: 'view executive dashboard' },
+      { title: 'Statistik RS', route: '/management/statistics', permission: 'view executive dashboard' }
     ]
   },
 
@@ -105,10 +113,10 @@ const menu = [
     title: 'Integrasi',
     icon: 'mdi-api',
     children: [
-      { title: 'BPJS V-Claim', route: '/integration/bpjs' },
-      { title: 'SatuSehat', route: '/integration/satusehat' },
-      { title: 'Antrean Nasional', route: '/integration/antrian' },
-      { title: 'API Manager', route: '/integration/api' }
+      { title: 'BPJS V-Claim', route: '/integration/bpjs', permission: 'manage billing' },
+      { title: 'SatuSehat', route: '/integration/satusehat', permission: 'manage medical records' },
+      { title: 'Antrean Nasional', route: '/integration/antrian', permission: 'manage visits' },
+      { title: 'API Manager', route: '/integration/api', permission: 'manage users' }
     ]
   },
 
@@ -116,14 +124,29 @@ const menu = [
     title: 'Sistem',
     icon: 'mdi-cog',
     children: [
-      { title: 'User Management', route: '/system/users' },
-      { title: 'Role & Permission', route: '/system/roles' },
-      { title: 'Audit Log', route: '/system/audit-log' },
-      { title: 'Master Data', route: '/system/master-data' },
-      { title: 'Pengaturan Sistem', route: '/system/settings' }
+      { title: 'User Management', route: '/system/users', permission: 'manage users' },
+      { title: 'Role & Permission', route: '/system/roles', permission: 'manage roles' },
+      { title: 'Audit Log', route: '/system/audit-log', permission: 'manage roles' },
+      { title: 'Master Data', route: '/system/master-data', permission: 'manage roles' },
+      { title: 'Pengaturan Sistem', route: '/system/settings', permission: 'manage roles' }
     ]
   }
 ]
+
+/* Filter menu dynamically */
+const filteredMenu = computed(() => {
+  return menu
+    .map(group => {
+      if (!group.children) {
+        return can(group.permission) ? group : null
+      }
+
+      const children = group.children.filter(child => can(child.permission))
+
+      return children.length ? { ...group, children } : null
+    })
+    .filter(Boolean)
+})
 </script>
 
 <template>
@@ -143,7 +166,7 @@ const menu = [
 
       <v-list nav density="comfortable">
 
-        <template v-for="item in menu" :key="item.title">
+        <template v-for="item in filteredMenu" :key="item.title">
 
           <v-list-item v-if="!item.children">
             <Link :href="item.route" class="sidebar-link">
@@ -326,7 +349,6 @@ const menu = [
   color: #60a5fa;
 }
 
-/* Profile Menu */
 .profile-btn {
   display: flex;
   align-items: center;
@@ -341,7 +363,6 @@ const menu = [
   min-width: 240px;
 }
 
-/* Logout Modal */
 .logout-solid {
   background: #0f172a;
   border: 1px solid rgba(255,255,255,0.08);

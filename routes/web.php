@@ -22,123 +22,247 @@ Route::get('/', function () {
 
 /*
 |--------------------------------------------------------------------------
-| AUTH DASHBOARD
+| AUTHENTICATED ROUTES
 |--------------------------------------------------------------------------
 */
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth'])->group(function () {
 
-/*
-|--------------------------------------------------------------------------
-| AUTHENTICATED AREA (SIMRS CORE)
-|--------------------------------------------------------------------------
-*/
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/dashboard', fn () => Inertia::render('Dashboard'))
+        ->middleware('permission:view dashboard')
+        ->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-
-    // =========================
-    // PROFILE
-    // =========================
+    /*
+    |--------------------------------------------------------------------------
+    | PROFILE
+    |--------------------------------------------------------------------------
+    */
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // =========================
-    // FRONT OFFICE / PELAYANAN MEDIS
-    // =========================
+    /*
+    |--------------------------------------------------------------------------
+    | FRONT OFFICE / PELAYANAN MEDIS
+    |--------------------------------------------------------------------------
+    */
 
-    // Master Pasien
-    Route::get('/patients', fn () => Inertia::render('Patients/Index'))->name('patients.index');
+    // Patients
+    Route::get('/patients', fn () => Inertia::render('Patients/Index'))
+        ->middleware('permission:manage patients')
+        ->name('patients.index');
 
-    // Kunjungan
-    Route::get('/visits', fn () => Inertia::render('Visits/Index'))->name('visits.index');
-    Route::get('/visits/create', fn () => Inertia::render('Visits/Create'))->name('visits.create');
+    Route::get('/patients/create', fn () => Inertia::render('Patients/Create'))
+        ->middleware('permission:manage patients')
+        ->name('patients.create');
 
-    // Rekam Medis
-    Route::get('/medical-records/index', fn () => Inertia::render('MedicalRecords/Index'))->name('medical-records.index');
-    Route::get('/medical-records/soap', fn () => Inertia::render('MedicalRecords/Soap'))->name('medical-records.soap');
+    // Visits
+    Route::get('/visits', fn () => Inertia::render('Visits/Index'))
+        ->middleware('permission:manage visits')
+        ->name('visits.index');
+
+    Route::get('/visits/create', fn () => Inertia::render('Visits/Create'))
+        ->middleware('permission:manage visits')
+        ->name('visits.create');
+
+    // Medical Records
+    Route::get('/medical-records/index', fn () => Inertia::render('MedicalRecords/Index'))
+        ->middleware('permission:manage medical records')
+        ->name('medical-records.index');
+
+    Route::get('/medical-records/soap', fn () => Inertia::render('MedicalRecords/Soap'))
+        ->middleware('permission:manage medical records')
+        ->name('medical-records.soap');
 
     // IGD
-    Route::get('/igd', fn () => Inertia::render('IGD/Index'))->name('igd.index');
+    Route::get('/igd', fn () => Inertia::render('IGD/Index'))
+        ->middleware('permission:manage visits')
+        ->name('igd.index');
 
-    // Rawat Jalan
-    Route::get('/outpatient', fn () => Inertia::render('Outpatient/Index'))->name('outpatient.index');
+    Route::get('/igd/create', fn () => Inertia::render('IGD/Create'))
+        ->middleware('permission:manage visits')
+        ->name('igd.create');
 
-    // Rawat Inap
-    Route::get('/inpatient', fn () => Inertia::render('Inpatient/Index'))->name('inpatient.index');
+    // Outpatient
+    Route::get('/outpatient', fn () => Inertia::render('Outpatient/Index'))
+        ->middleware('permission:manage visits')
+        ->name('outpatient.index');
 
-    // Tindakan Medis
-    Route::get('/procedures', fn () => Inertia::render('Procedures/Index'))->name('procedures.index');
+    Route::get('/outpatient/create', fn () => Inertia::render('Outpatient/Create'))
+        ->middleware('permission:manage visits')
+        ->name('outpatient.create');
 
+    // Inpatient
+    Route::get('/inpatient', fn () => Inertia::render('Inpatient/Index'))
+        ->middleware('permission:manage visits')
+        ->name('inpatient.index');
 
-    // =========================
-    // PENUNJANG MEDIS
-    // =========================
+    Route::get('/inpatient/create', fn () => Inertia::render('Inpatient/Create'))
+        ->middleware('permission:manage visits')
+        ->name('inpatient.create');
 
-    Route::get('/laboratory', fn () => Inertia::render('Laboratory/Index'))->name('laboratory.index');
-    Route::get('/radiology', fn () => Inertia::render('Radiology/Index'))->name('radiology.index');
-    Route::get('/pharmacy', fn () => Inertia::render('Pharmacy/Index'))->name('pharmacy.index');
+    // Procedures
+    Route::get('/procedures', fn () => Inertia::render('Procedures/Index'))
+        ->middleware('permission:manage medical records')
+        ->name('procedures.index');
 
-
-    // =========================
-    // KEUANGAN
-    // =========================
-
-    Route::get('/finance/billing', fn () => Inertia::render('Finance/Billing'))->name('finance.billing');
-    Route::get('/finance/cashier', fn () => Inertia::render('Finance/Cashier'))->name('finance.cashier');
-    Route::get('/finance/bpjs', fn () => Inertia::render('Finance/BPJSClaims'))->name('finance.bpjs');
-    Route::get('/finance/accounting', fn () => Inertia::render('Finance/Accounting'))->name('finance.accounting');
-
-
-    // =========================
-    // HR / SDM (HRIS)
-    // =========================
-
-    Route::get('/hr/employees', fn () => Inertia::render('HR/Employees'))->name('hr.employees');
-    Route::get('/hr/schedules', fn () => Inertia::render('HR/Schedules'))->name('hr.schedules');
-    Route::get('/hr/payroll', fn () => Inertia::render('HR/Payroll'))->name('hr.payroll');
+    Route::get('/procedures/create', fn () => Inertia::render('Procedures/Create'))
+        ->middleware('permission:manage medical records')
+        ->name('procedures.create');
 
 
-    // =========================
-    // LOGISTIK & INVENTORY
-    // =========================
+    /*
+    |--------------------------------------------------------------------------
+    | PENUNJANG
+    |--------------------------------------------------------------------------
+    */
 
-    Route::get('/inventory', fn () => Inertia::render('Inventory/Index'))->name('inventory.index');
-    Route::get('/assets', fn () => Inertia::render('Assets/Index'))->name('assets.index');
-    Route::get('/suppliers', fn () => Inertia::render('Suppliers/Index'))->name('suppliers.index');
+    Route::get('/laboratory', fn () => Inertia::render('Laboratory/Index'))
+        ->middleware('permission:manage medical records')
+        ->name('laboratory.index');
 
+    Route::get('/radiology', fn () => Inertia::render('Radiology/Index'))
+        ->middleware('permission:manage medical records')
+        ->name('radiology.index');
 
-    // =========================
-    // MANAJEMEN & ANALYTICS
-    // =========================
-
-    Route::get('/management/dashboard', fn () => Inertia::render('Management/Dashboard'))->name('management.dashboard');
-    Route::get('/management/reports', fn () => Inertia::render('Management/Reports'))->name('management.reports');
-    Route::get('/management/statistics', fn () => Inertia::render('Management/Statistics'))->name('management.statistics');
-
-
-    // =========================
-    // INTEGRASI EKSTERNAL
-    // =========================
-
-    Route::get('/integration/bpjs', fn () => Inertia::render('Integration/BPJS'))->name('integration.bpjs');
-    Route::get('/integration/satusehat', fn () => Inertia::render('Integration/Satusehat'))->name('integration.satusehat');
-    Route::get('/integration/antrian', fn () => Inertia::render('Integration/Antrian'))->name('integration.antrian');
-    Route::get('/integration/api', fn () => Inertia::render('Integration/Api'))->name('integration.api');
+    Route::get('/pharmacy', fn () => Inertia::render('Pharmacy/Index'))
+        ->middleware('permission:manage pharmacy')
+        ->name('pharmacy.index');
 
 
-    // =========================
-    // SYSTEM ADMIN
-    // =========================
+    /*
+    |--------------------------------------------------------------------------
+    | KEUANGAN
+    |--------------------------------------------------------------------------
+    */
 
-    Route::get('/system/users', fn () => Inertia::render('System/Users'))->name('system.users');
-    Route::get('/system/roles', fn () => Inertia::render('System/Roles'))->name('system.roles');
-    Route::get('/system/audit-log', fn () => Inertia::render('System/AuditLog'))->name('system.audit');
-    Route::get('/system/master-data', fn () => Inertia::render('System/MasterData'))->name('system.master');
-    Route::get('/system/settings', fn () => Inertia::render('System/Settings'))->name('system.settings');
+    Route::get('/finance/billing', fn () => Inertia::render('Finance/Billing'))
+        ->middleware('permission:manage billing')
+        ->name('finance.billing');
 
+    Route::get('/finance/cashier', fn () => Inertia::render('Finance/Cashier'))
+        ->middleware('permission:manage cashier')
+        ->name('finance.cashier');
+
+    Route::get('/finance/bpjs', fn () => Inertia::render('Finance/BPJSClaims'))
+        ->middleware('permission:manage billing')
+        ->name('finance.bpjs');
+
+    Route::get('/finance/accounting', fn () => Inertia::render('Finance/Accounting'))
+        ->middleware('permission:manage billing')
+        ->name('finance.accounting');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | HR / SDM
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/hr/employees', fn () => Inertia::render('HR/Employees'))
+        ->middleware('permission:manage employees')
+        ->name('hr.employees');
+
+    Route::get('/hr/schedules', fn () => Inertia::render('HR/Schedules'))
+        ->middleware('permission:manage employees')
+        ->name('hr.schedules');
+
+    Route::get('/hr/payroll', fn () => Inertia::render('HR/Payroll'))
+        ->middleware('permission:manage payroll')
+        ->name('hr.payroll');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOGISTIK / INVENTORY
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/inventory', fn () => Inertia::render('Inventory/Index'))
+        ->middleware('permission:manage inventory')
+        ->name('inventory.index');
+
+    Route::get('/assets', fn () => Inertia::render('Assets/Index'))
+        ->middleware('permission:manage inventory')
+        ->name('assets.index');
+
+    Route::get('/suppliers', fn () => Inertia::render('Suppliers/Index'))
+        ->middleware('permission:manage inventory')
+        ->name('suppliers.index');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | MANAJEMEN / EKSEKUTIF
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/management/dashboard', fn () => Inertia::render('Management/Dashboard'))
+        ->middleware('permission:view executive dashboard')
+        ->name('management.dashboard');
+
+    Route::get('/management/reports', fn () => Inertia::render('Management/Reports'))
+        ->middleware('permission:view executive dashboard')
+        ->name('management.reports');
+
+    Route::get('/management/statistics', fn () => Inertia::render('Management/Statistics'))
+        ->middleware('permission:view executive dashboard')
+        ->name('management.statistics');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | INTEGRASI
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/integration/bpjs', fn () => Inertia::render('Integration/BPJS'))
+        ->middleware('permission:manage billing')
+        ->name('integration.bpjs');
+
+    Route::get('/integration/satusehat', fn () => Inertia::render('Integration/Satusehat'))
+        ->middleware('permission:manage medical records')
+        ->name('integration.satusehat');
+
+    Route::get('/integration/antrian', fn () => Inertia::render('Integration/Antrian'))
+        ->middleware('permission:manage visits')
+        ->name('integration.antrian');
+
+    Route::get('/integration/api', fn () => Inertia::render('Integration/Api'))
+        ->middleware('permission:manage users')
+        ->name('integration.api');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SYSTEM ADMIN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/system/users', fn () => Inertia::render('System/Users'))
+        ->middleware('permission:manage users')
+        ->name('system.users');
+
+    Route::get('/system/roles', fn () => Inertia::render('System/Roles'))
+        ->middleware('permission:manage roles')
+        ->name('system.roles');
+
+    Route::get('/system/audit-log', fn () => Inertia::render('System/AuditLog'))
+        ->middleware('permission:manage roles')
+        ->name('system.audit');
+
+    Route::get('/system/master-data', fn () => Inertia::render('System/MasterData'))
+        ->middleware('permission:manage roles')
+        ->name('system.master');
+
+    Route::get('/system/settings', fn () => Inertia::render('System/Settings'))
+        ->middleware('permission:manage roles')
+        ->name('system.settings');
 });
 
 require __DIR__.'/auth.php';
